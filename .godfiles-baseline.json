@@ -1,0 +1,71 @@
+{
+ "max_lines": 5000,
+ "max_bytes": 307200,
+ "files": [
+  {
+   "path": "desktop/app.go",
+   "lines": 11982,
+   "bytes": 391737
+  },
+  {
+   "path": "desktop/app_test.go",
+   "lines": 10414,
+   "bytes": 355274
+  },
+  {
+   "path": "desktop/frontend/src/components/SettingsPanel.tsx",
+   "lines": 7296,
+   "bytes": 337013
+  },
+  {
+   "path": "desktop/frontend/src/generated/desktopContract.generated.json",
+   "lines": 40394,
+   "bytes": 836569
+  },
+  {
+   "path": "desktop/frontend/src/generated/desktopContract.generated.ts",
+   "lines": 5566,
+   "bytes": 147240
+  },
+  {
+   "path": "desktop/frontend/src/lib/bridge.ts",
+   "lines": 5709,
+   "bytes": 312458
+  },
+  {
+   "path": "desktop/host_command_owners.generated.json",
+   "lines": 9567,
+   "bytes": 208584
+  },
+  {
+   "path": "desktop/pnpm-lock.yaml",
+   "lines": 5490,
+   "bytes": 177636
+  },
+  {
+   "path": "desktop/tabs.go",
+   "lines": 8058,
+   "bytes": 255132
+  },
+  {
+   "path": "docs/desktop-migration/inventory.json",
+   "lines": 6091,
+   "bytes": 195913
+  },
+  {
+   "path": "internal/control/controller.go",
+   "lines": 6054,
+   "bytes": 231091
+  },
+  {
+   "path": "internal/control/controller_test.go",
+   "lines": 5407,
+   "bytes": 198415
+  },
+  {
+   "path": "release-notes/releases.json",
+   "lines": 24339,
+   "bytes": 978887
+  }
+ ]
+}

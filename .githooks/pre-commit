@@ -1,0 +1,11 @@
+#!/bin/sh
+# 提交前快门（S148 落地）：秒级门——vet/repolint/lint/明文/依赖/大文件/时效。
+# 全门（含 go test ./...）在 pre-push（见 .githooks/pre-push）。
+# 安装：make hooks（core.hooksPath 已指向 .githooks）
+set -e
+if command -v python3 >/dev/null 2>&1; then
+  PY=python3
+else
+  PY=python
+fi
+"$PY" scripts/local_audit.py --fast

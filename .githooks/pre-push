@@ -2,5 +2,12 @@
 # Go-native pre-push gate replacing the retired v1 npm hook (install: make hooks).
 # Full tests run in CI; vet is the fast, cross-platform local check.
 set -e
+if command -v python3 >/dev/null 2>&1; then
+  PY=python3
+else
+  PY=python
+fi
+"$PY" scripts/local_audit.py --fast
 go vet ./...
 go run ./tools/repolint
+

@@ -9,7 +9,7 @@ GOEXE := $(shell go env GOEXE)
 # One pin for the Makefile and the CI lint job; see .github/workflows/ci.yml.
 GOLANGCI_VERSION := $(shell cat .golangci-version)
 
-.PHONY: build vet fmt lint lint-go lint-install lint-cross lint-update test desktop-test desktop-test-short desktop-test-times sdk-test sdk-test-race hooks cross clean
+.PHONY: build vet fmt lint lint-go lint-install lint-cross lint-update test desktop-test desktop-test-short desktop-test-times sdk-test sdk-test-race hooks cross clean audit audit-fast audit-deps audit-godfiles audit-coverage
 
 build:
 	CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o bin/reasonix$(GOEXE) ./cmd/reasonix
@@ -70,6 +70,23 @@ sdk-test-race:
 hooks:
 	@git config core.hooksPath .githooks
 	@echo "installed: core.hooksPath -> .githooks (pre-push runs go vet)"
+
+# --- S148 audit gates (scripts/local_audit.py) ---
+audit: ## full gate: fast gate + go test ./...
+	python3 scripts/local_audit.py
+
+audit-fast: ## fast gate before commit/push
+	python3 scripts/local_audit.py --fast
+
+audit-deps: ## refresh dependency baseline (explicit ledger action)
+	python3 scripts/local_audit.py --only deps --update-deps
+
+audit-godfiles: ## freeze/refresh god-file baseline
+	python3 scripts/local_audit.py --only godfiles --update-godfiles
+
+audit-coverage: ## refresh coverage baseline (trend gate)
+	python3 scripts/local_audit.py --only coverage --update-coverage
+
 
 cross:
 	@mkdir -p dist
