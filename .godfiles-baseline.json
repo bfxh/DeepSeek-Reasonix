@@ -4,68 +4,68 @@
  "files": [
   {
    "path": "desktop/app.go",
-   "lines": 11982,
-   "bytes": 391737
+   "lines": 11698,
+   "bytes": 382842
   },
   {
    "path": "desktop/app_test.go",
-   "lines": 10414,
-   "bytes": 355274
+   "lines": 10412,
+   "bytes": 355256
   },
   {
    "path": "desktop/frontend/src/components/SettingsPanel.tsx",
-   "lines": 7296,
-   "bytes": 337013
+   "lines": 7283,
+   "bytes": 336736
   },
   {
    "path": "desktop/frontend/src/generated/desktopContract.generated.json",
-   "lines": 40394,
-   "bytes": 836569
+   "lines": 45973,
+   "bytes": 956589
   },
   {
    "path": "desktop/frontend/src/generated/desktopContract.generated.ts",
-   "lines": 5566,
-   "bytes": 147240
+   "lines": 6286,
+   "bytes": 168879
   },
   {
    "path": "desktop/frontend/src/lib/bridge.ts",
-   "lines": 5709,
-   "bytes": 312458
+   "lines": 5991,
+   "bytes": 331919
   },
   {
    "path": "desktop/host_command_owners.generated.json",
-   "lines": 9567,
-   "bytes": 208584
+   "lines": 10909,
+   "bytes": 240323
   },
   {
    "path": "desktop/pnpm-lock.yaml",
-   "lines": 5490,
-   "bytes": 177636
+   "lines": 5493,
+   "bytes": 177721
   },
   {
    "path": "desktop/tabs.go",
-   "lines": 8058,
-   "bytes": 255132
+   "lines": 7954,
+   "bytes": 252257
   },
   {
    "path": "docs/desktop-migration/inventory.json",
-   "lines": 6091,
-   "bytes": 195913
+   "lines": 6888,
+   "bytes": 224704
   },
   {
    "path": "internal/control/controller.go",
-   "lines": 6054,
-   "bytes": 231091
+   "lines": 5800,
+   "bytes": 222807
   },
   {
    "path": "internal/control/controller_test.go",
-   "lines": 5407,
-   "bytes": 198415
+   "lines": 5360,
+   "bytes": 196742
   },
   {
    "path": "release-notes/releases.json",
-   "lines": 24339,
-   "bytes": 978887
+   "lines": 25048,
+   "bytes": 1004810
   }
  ]
 }
