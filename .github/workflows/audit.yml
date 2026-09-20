@@ -4,6 +4,8 @@ name: Audit
 # local_audit.py 是合入前本机快门（make audit-fast / pre-commit / pre-push）；
 # 本 workflow 是它在 CI 上的备份——确保合入 main-v2 的每一笔都过同样门。
 # vet/repolint/golangci 已由 ci.yml 的 lint-code/root/lint job 覆盖，此处不重复。
+# 注意：unified-rx 沙箱纪律在此退化为"当前 repo 只读"；local_audit.py 全步骤
+# 均为只读扫描（除 --update-* 记账动作），无写面。
 
 on:
   push:
@@ -24,15 +26,15 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          fetch-depth: 50        # history 门要近 50 提交的 diff 面
+          fetch-depth: 50        # history 门要近 50 提交的 diff 面；blob:none 下 git log -p 需要完整 blob，fetch-depth 50 即覆盖
 
-      - uses: actions/setup-go@v7
+      - uses: actions/setup-python@v7
         with:
-          go-version-file: go.mod
-          cache: false
+          python-version: "3.12"
 
       - name: local audit gates (secrets/history/deps/godfiles/freshness)
         run: |
+          # 纯文本/只读门：不需要 Go 工具链（与 ci.yml 的 vet/lint 职责分离）
           python3 scripts/local_audit.py --only secrets,history,deps,godfiles,freshness
 
   coverage-gate:
@@ -48,6 +50,21 @@ jobs:
         with:
           go-version-file: go.mod
           cache: false
+
+      - name: Install and verify Linux sandbox backend
+        # 对齐 ci.yml：Reasonix 的 Linux sandbox 测试依赖 bubblewrap，
+        # 缺失时相关测试 fail-closed，coverage.out 面不完整。
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bubblewrap
+          if sysctl -n kernel.unprivileged_userns_clone >/dev/null 2>&1; then
+            sudo sysctl -w kernel.unprivileged_userns_clone=1
+          fi
+          if sysctl -n kernel.apparmor_restrict_unprivileged_userns >/dev/null 2>&1; then
+            sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          fi
+          bwrap --ro-bind / / --dev /dev --proc /proc -- true || \
+            echo "::warning::bubblewrap is installed but this runner denies user namespaces; unavailable-backend tests will run fail-closed"
 
       - name: test with coverage
         run: go test -coverprofile=coverage.out -covermode=atomic ./...
