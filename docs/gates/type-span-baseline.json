@@ -1,0 +1,726 @@
+{
+ "cmd/e2ebench|trajScan": {
+  "methods": 15,
+  "files": 5
+ },
+ "desktop/internal/draftstate|Store": {
+  "methods": 27,
+  "files": 2
+ },
+ "desktop/internal/hostrpc|Server": {
+  "methods": 14,
+  "files": 1
+ },
+ "desktop/internal/workspacestate/testdata/v2previous|Store": {
+  "methods": 34,
+  "files": 2
+ },
+ "desktop/internal/workspacestate|ReadSnapshot": {
+  "methods": 8,
+  "files": 3
+ },
+ "desktop/internal/workspacestate|State": {
+  "methods": 6,
+  "files": 3
+ },
+ "desktop/internal/workspacestate|Store": {
+  "methods": 63,
+  "files": 12
+ },
+ "desktop/third_party/systray|MenuItem": {
+  "methods": 30,
+  "files": 5
+ },
+ "desktop/third_party/systray|winTray": {
+  "methods": 17,
+  "files": 1
+ },
+ "desktop|App": {
+  "methods": 1847,
+  "files": 306
+ },
+ "desktop|HeartbeatEngine": {
+  "methods": 29,
+  "files": 3
+ },
+ "desktop|WorkspaceTab": {
+  "methods": 51,
+  "files": 9
+ },
+ "desktop|botBridgeHub": {
+  "methods": 26,
+  "files": 1
+ },
+ "desktop|brokerSessionExecutor": {
+  "methods": 13,
+  "files": 1
+ },
+ "desktop|credentialProxy": {
+  "methods": 7,
+  "files": 3
+ },
+ "desktop|desktopBotRuntime": {
+  "methods": 10,
+  "files": 1
+ },
+ "desktop|desktopLifecycleTracker": {
+  "methods": 13,
+  "files": 1
+ },
+ "desktop|desktopRemoteManager": {
+  "methods": 27,
+  "files": 5
+ },
+ "desktop|historicalImportCoordinator": {
+  "methods": 7,
+  "files": 3
+ },
+ "desktop|hostBrowserExecutor": {
+  "methods": 20,
+  "files": 3
+ },
+ "desktop|hostShellBridge": {
+  "methods": 14,
+  "files": 2
+ },
+ "desktop|manualCreationManager": {
+  "methods": 21,
+  "files": 3
+ },
+ "desktop|readSnapshotStore": {
+  "methods": 17,
+  "files": 1
+ },
+ "desktop|rpcNativeHost": {
+  "methods": 24,
+  "files": 1
+ },
+ "desktop|tabBrowserExecutor": {
+  "methods": 13,
+  "files": 2
+ },
+ "desktop|tabEventSink": {
+  "methods": 31,
+  "files": 6
+ },
+ "desktop|takeoverMirror": {
+  "methods": 29,
+  "files": 2
+ },
+ "desktop|terminalManager": {
+  "methods": 19,
+  "files": 2
+ },
+ "desktop|topicStateManager": {
+  "methods": 19,
+  "files": 4
+ },
+ "desktop|windowsWorkspaceWatcher": {
+  "methods": 11,
+  "files": 1
+ },
+ "desktop|workspaceChangeHub": {
+  "methods": 19,
+  "files": 1
+ },
+ "internal/acp|Conn": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/acp|acpSession": {
+  "methods": 25,
+  "files": 2
+ },
+ "internal/acp|service": {
+  "methods": 70,
+  "files": 6
+ },
+ "internal/acp|updateSink": {
+  "methods": 22,
+  "files": 2
+ },
+ "internal/agent|Agent": {
+  "methods": 372,
+  "files": 81
+ },
+ "internal/agent|Coordinator": {
+  "methods": 20,
+  "files": 3
+ },
+ "internal/agent|DisplayPager": {
+  "methods": 11,
+  "files": 4
+ },
+ "internal/agent|MCPCapabilityRuntime": {
+  "methods": 22,
+  "files": 4
+ },
+ "internal/agent|Session": {
+  "methods": 116,
+  "files": 23
+ },
+ "internal/agent|SessionLease": {
+  "methods": 8,
+  "files": 3
+ },
+ "internal/agent|SessionWriter": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/agent|SubagentScheduler": {
+  "methods": 18,
+  "files": 2
+ },
+ "internal/agent|SubagentStore": {
+  "methods": 28,
+  "files": 3
+ },
+ "internal/agent|TaskTool": {
+  "methods": 49,
+  "files": 5
+ },
+ "internal/agent|UseCapabilityTool": {
+  "methods": 47,
+  "files": 12
+ },
+ "internal/agent|missingReasoningWarnState": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/agent|onDemandMCPConnect": {
+  "methods": 10,
+  "files": 1
+ },
+ "internal/agent|onDemandMCPTool": {
+  "methods": 13,
+  "files": 1
+ },
+ "internal/agent|pathBoundCapabilityProxy": {
+  "methods": 10,
+  "files": 1
+ },
+ "internal/agent|runtimeBoundMCPTool": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/agent|sessionDAGState": {
+  "methods": 17,
+  "files": 3
+ },
+ "internal/agent|subagentProgressMerger": {
+  "methods": 18,
+  "files": 1
+ },
+ "internal/appidentity|loadedShortcut": {
+  "methods": 10,
+  "files": 2
+ },
+ "internal/attachment|Service": {
+  "methods": 10,
+  "files": 2
+ },
+ "internal/attachment|VariantCache": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/bot/dingtalk|adapter": {
+  "methods": 32,
+  "files": 2
+ },
+ "internal/bot/feishu|adapter": {
+  "methods": 41,
+  "files": 4
+ },
+ "internal/bot/qq|adapter": {
+  "methods": 28,
+  "files": 2
+ },
+ "internal/bot/weixin|adapter": {
+  "methods": 23,
+  "files": 1
+ },
+ "internal/bot|BotGateway": {
+  "methods": 113,
+  "files": 12
+ },
+ "internal/bot|SessionManager": {
+  "methods": 16,
+  "files": 1
+ },
+ "internal/bot|renderSink": {
+  "methods": 10,
+  "files": 2
+ },
+ "internal/browser/cdp|Executor": {
+  "methods": 49,
+  "files": 4
+ },
+ "internal/browser/cdp|Lazy": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/browser/cdp|conn": {
+  "methods": 13,
+  "files": 1
+ },
+ "internal/browser|httpExecutor": {
+  "methods": 13,
+  "files": 1
+ },
+ "internal/browser|httpHandler": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/capability|Audit": {
+  "methods": 17,
+  "files": 1
+ },
+ "internal/capability|Ledger": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/checkpoint|MutationObserver": {
+  "methods": 14,
+  "files": 1
+ },
+ "internal/checkpoint|Store": {
+  "methods": 83,
+  "files": 9
+ },
+ "internal/cli|chatTUI": {
+  "methods": 421,
+  "files": 64
+ },
+ "internal/cli|cliTakeoverManager": {
+  "methods": 33,
+  "files": 2
+ },
+ "internal/cli|mcpManager": {
+  "methods": 12,
+  "files": 2
+ },
+ "internal/cli|mdRenderer": {
+  "methods": 16,
+  "files": 1
+ },
+ "internal/cli|metricsSink": {
+  "methods": 21,
+  "files": 2
+ },
+ "internal/cli|providerSetupSession": {
+  "methods": 20,
+  "files": 1
+ },
+ "internal/cli|skillPicker": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/cli|tuiDiagnostics": {
+  "methods": 25,
+  "files": 1
+ },
+ "internal/config|Config": {
+  "methods": 178,
+  "files": 23
+ },
+ "internal/config|MCPActivationStore": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/config|ModelCapabilityResolver": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/config|ProviderEntry": {
+  "methods": 26,
+  "files": 8
+ },
+ "internal/control|Controller": {
+  "methods": 803,
+  "files": 114
+ },
+ "internal/control|PendingPromptOwner": {
+  "methods": 22,
+  "files": 1
+ },
+ "internal/control|SessionLeaseKeeper": {
+  "methods": 33,
+  "files": 1
+ },
+ "internal/control|approvalManager": {
+  "methods": 48,
+  "files": 2
+ },
+ "internal/control|checkpointManager": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/control|frontendEventSink": {
+  "methods": 18,
+  "files": 2
+ },
+ "internal/control|goalMachine": {
+  "methods": 41,
+  "files": 6
+ },
+ "internal/control|inboxEventSink": {
+  "methods": 18,
+  "files": 2
+ },
+ "internal/control|mcpManager": {
+  "methods": 14,
+  "files": 1
+ },
+ "internal/control|memoryManager": {
+  "methods": 19,
+  "files": 1
+ },
+ "internal/control|turnEventDurableSink": {
+  "methods": 17,
+  "files": 2
+ },
+ "internal/control|turnEventSink": {
+  "methods": 12,
+  "files": 3
+ },
+ "internal/control|turnOrchestrator": {
+  "methods": 16,
+  "files": 1
+ },
+ "internal/eventwire|MirrorQueue": {
+  "methods": 13,
+  "files": 1
+ },
+ "internal/event|AuditForwarder": {
+  "methods": 14,
+  "files": 2
+ },
+ "internal/event|coalescer": {
+  "methods": 21,
+  "files": 2
+ },
+ "internal/event|syncSink": {
+  "methods": 15,
+  "files": 2
+ },
+ "internal/evidence|Ledger": {
+  "methods": 55,
+  "files": 9
+ },
+ "internal/extension/providerext|Resolver": {
+  "methods": 18,
+  "files": 3
+ },
+ "internal/extension/rpcwire|Conn": {
+  "methods": 28,
+  "files": 1
+ },
+ "internal/extension/sidecar|Client": {
+  "methods": 40,
+  "files": 4
+ },
+ "internal/extension/uihub|Hub": {
+  "methods": 20,
+  "files": 2
+ },
+ "internal/extension|PublishGate": {
+  "methods": 17,
+  "files": 1
+ },
+ "internal/extension|RuntimeSnapshot": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/goal|Machine": {
+  "methods": 18,
+  "files": 1
+ },
+ "internal/guardian|Session": {
+  "methods": 19,
+  "files": 1
+ },
+ "internal/historycatalog|Catalog": {
+  "methods": 31,
+  "files": 5
+ },
+ "internal/hook|Runner": {
+  "methods": 23,
+  "files": 1
+ },
+ "internal/imageinput|Service": {
+  "methods": 6,
+  "files": 4
+ },
+ "internal/installsource|installSourceTool": {
+  "methods": 51,
+  "files": 7
+ },
+ "internal/jobs|Manager": {
+  "methods": 73,
+  "files": 7
+ },
+ "internal/lsp|Manager": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/lsp|client": {
+  "methods": 10,
+  "files": 1
+ },
+ "internal/memory|Set": {
+  "methods": 11,
+  "files": 2
+ },
+ "internal/memory|Store": {
+  "methods": 29,
+  "files": 4
+ },
+ "internal/persistentshell|session": {
+  "methods": 8,
+  "files": 3
+ },
+ "internal/plugin|Client": {
+  "methods": 34,
+  "files": 9
+ },
+ "internal/plugin|Host": {
+  "methods": 81,
+  "files": 8
+ },
+ "internal/plugin|appInstanceRegistry": {
+  "methods": 10,
+  "files": 1
+ },
+ "internal/plugin|lazyTool": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/plugin|remoteTool": {
+  "methods": 18,
+  "files": 1
+ },
+ "internal/plugin|sdkSessionTransport": {
+  "methods": 28,
+  "files": 5
+ },
+ "internal/provider/anthropic|client": {
+  "methods": 26,
+  "files": 7
+ },
+ "internal/provider/openai|client": {
+  "methods": 27,
+  "files": 7
+ },
+ "internal/provider/responses|client": {
+  "methods": 23,
+  "files": 7
+ },
+ "internal/readcoord|Coordinator": {
+  "methods": 10,
+  "files": 2
+ },
+ "internal/remote/forward|Set": {
+  "methods": 15,
+  "files": 1
+ },
+ "internal/remote/sftpfs|FS": {
+  "methods": 14,
+  "files": 1
+ },
+ "internal/remote/sshtest|Server": {
+  "methods": 10,
+  "files": 1
+ },
+ "internal/remote|Client": {
+  "methods": 17,
+  "files": 1
+ },
+ "internal/remote|SSHConfigSource": {
+  "methods": 15,
+  "files": 1
+ },
+ "internal/sandbox|WritableRootSet": {
+  "methods": 13,
+  "files": 1
+ },
+ "internal/serve|Broadcaster": {
+  "methods": 17,
+  "files": 2
+ },
+ "internal/serve|BrowserBroker": {
+  "methods": 13,
+  "files": 1
+ },
+ "internal/serve|Server": {
+  "methods": 262,
+  "files": 48
+ },
+ "internal/serve|authGate": {
+  "methods": 17,
+  "files": 1
+ },
+ "internal/serve|sessionBrowserExecutor": {
+  "methods": 10,
+  "files": 1
+ },
+ "internal/serve|sessionTagSink": {
+  "methods": 11,
+  "files": 2
+ },
+ "internal/sessioncatalog|Catalog": {
+  "methods": 124,
+  "files": 31
+ },
+ "internal/sessioncontent|Store": {
+  "methods": 17,
+  "files": 1
+ },
+ "internal/sessioninbox|Store": {
+  "methods": 59,
+  "files": 6
+ },
+ "internal/sessiontemp|Manager": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/session|FilesystemPersistence": {
+  "methods": 15,
+  "files": 4
+ },
+ "internal/session|PersistenceBinding": {
+  "methods": 15,
+  "files": 1
+ },
+ "internal/session|Query": {
+  "methods": 53,
+  "files": 14
+ },
+ "internal/session|Runtime": {
+  "methods": 24,
+  "files": 3
+ },
+ "internal/session|Service": {
+  "methods": 62,
+  "files": 11
+ },
+ "internal/session|Session": {
+  "methods": 45,
+  "files": 8
+ },
+ "internal/session|Store": {
+  "methods": 12,
+  "files": 3
+ },
+ "internal/skill/skillwatch|Service": {
+  "methods": 15,
+  "files": 1
+ },
+ "internal/skill/skillwatch|helperClient": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/skill/skillwatch|nativeBackend": {
+  "methods": 10,
+  "files": 1
+ },
+ "internal/skill|Store": {
+  "methods": 49,
+  "files": 6
+ },
+ "internal/stats|Recorder": {
+  "methods": 19,
+  "files": 2
+ },
+ "internal/taskcatalog|Catalog": {
+  "methods": 24,
+  "files": 2
+ },
+ "internal/taskmonitor|FileStore": {
+  "methods": 17,
+  "files": 2
+ },
+ "internal/taskmonitor|InMemoryStore": {
+  "methods": 13,
+  "files": 1
+ },
+ "internal/taskmonitor|TmuxAdapter": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/tool/builtin|bash": {
+  "methods": 20,
+  "files": 4
+ },
+ "internal/tool/builtin|codeIndex": {
+  "methods": 8,
+  "files": 3
+ },
+ "internal/tool/builtin|deleteSymbol": {
+  "methods": 6,
+  "files": 3
+ },
+ "internal/tool/builtin|editFile": {
+  "methods": 5,
+  "files": 4
+ },
+ "internal/tool/builtin|editSource": {
+  "methods": 8,
+  "files": 3
+ },
+ "internal/tool/builtin|htmlTextWriter": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/tool/builtin|multiEdit": {
+  "methods": 5,
+  "files": 4
+ },
+ "internal/tool/builtin|notebookEdit": {
+  "methods": 5,
+  "files": 3
+ },
+ "internal/tool/builtin|writeFile": {
+  "methods": 4,
+  "files": 3
+ },
+ "internal/tool|Registry": {
+  "methods": 21,
+  "files": 2
+ },
+ "internal/topicstate|Store": {
+  "methods": 17,
+  "files": 1
+ },
+ "internal/trajectory|Recorder": {
+  "methods": 17,
+  "files": 2
+ },
+ "internal/transcript|Buffer": {
+  "methods": 13,
+  "files": 1
+ },
+ "internal/transcript|Projection": {
+  "methods": 31,
+  "files": 8
+ },
+ "internal/turnevent|Ledger": {
+  "methods": 43,
+  "files": 5
+ },
+ "internal/usagecatalog|Catalog": {
+  "methods": 16,
+  "files": 1
+ },
+ "internal/workspacelease|Owner": {
+  "methods": 41,
+  "files": 2
+ },
+ "sdk/go|conn": {
+  "methods": 20,
+  "files": 1
+ },
+ "sdk/go|server": {
+  "methods": 20,
+  "files": 1
+ }
+}

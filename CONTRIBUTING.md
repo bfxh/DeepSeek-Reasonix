@@ -260,3 +260,19 @@ Open an issue on GitHub with:
 
 By contributing, you agree that your contributions will be licensed under the
 same license as the project.
+
+## Structure and complexity gates
+
+`make gates` runs the structure gates (`scripts/gates/`, pure Python, ~45s):
+god objects, cross-file god types, architecture rules, near-duplicate code, multi-agent
+claim conflicts, and a gate self-test. Full write-up: [docs/GATES.md](docs/GATES.md).
+
+- No god objects: file ≤1000 lines, function ≤80 lines, struct ≤20 fields, and a type's
+  methods ≤40 across ≤8 files. All are ratchets — they may shrink, never grow.
+- **Touch tax**: if you modify a file that is already over a threshold, you must make it
+  smaller. "Did not grow it" is not enough.
+- `import "unsafe"` is allowed only in platform-suffixed files (`_windows.go`, `_darwin.go`,
+  …) and `third_party/`; anything else needs an entry with a `why` in
+  `docs/gates/unsafe-exempt.json`.
+- After splitting a god object, run `make gates-baseline` and **review the diff** — a looser
+  baseline is a weaker gate.

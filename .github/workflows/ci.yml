@@ -1815,3 +1815,21 @@ jobs:
           name: coverage-report
           path: coverage.out
           retention-days: 7
+
+  gate-shape:
+    name: Gates shape (gates must not be quietly weakened)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # Why this lives in ci.yml instead of only inside gates.yml: the gates are
+      # plain text files in the repo. Delete gates.yml (or drop a job from it)
+      # and that workflow simply stops running — something *else* has to notice.
+      # This step runs `gate_selftest.py`: gate scripts and gates.yml stay in
+      # sync in both directions, the pre-commit hook still calls the fast gate,
+      # thresholds were not relaxed, and the baselines are still there.
+      - name: Gates still present and not weakened
+        run: python3 -X utf8 scripts/gates/gate_selftest.py

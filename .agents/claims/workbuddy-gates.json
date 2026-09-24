@@ -1,0 +1,20 @@
+{
+  "agent": "workbuddy-gates",
+  "driver": "寇豆码",
+  "branch": "ci/gates-strict",
+  "task": "加结构与复杂度门禁（上帝对象/跨文件类型/架构/雷同/多智能体）",
+  "scope": [
+    "scripts/gates/**",
+    ".agents/**",
+    ".github/workflows/gates.yml",
+    ".github/workflows/ci.yml",
+    ".githooks/pre-commit",
+    "Makefile",
+    "docs/gates/**",
+    "docs/GATES.md",
+    "REASONIX.md",
+    "CONTRIBUTING.md"
+  ],
+  "opened": "2026-09-25",
+  "expires": "2026-10-02"
+}

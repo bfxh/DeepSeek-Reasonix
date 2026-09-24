@@ -1,0 +1,15 @@
+#!/bin/sh
+# 提交前快门：结构与复杂度门禁（秒级 + 全仓扫描约 20 秒，不需要 Go 工具链）。
+# 安装：make hooks（core.hooksPath 指向 .githooks）；跳过：git commit --no-verify
+# 另一套（repolint / vet / 明文 / 依赖 / 上帝文件 / 时效）在 scripts/local_audit.py。
+set -e
+
+if command -v python3 >/dev/null 2>&1; then
+  PY=python3
+else
+  PY=python
+fi
+
+# 身份（多智能体并行）：export QJ_AGENT_ID=你的id 并建 .agents/claims/<id>.json，
+# 见 .agents/CLAIMS.md。没设身份就只跑不依赖身份的几条。
+"$PY" scripts/gates/gate.py --fast

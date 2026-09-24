@@ -1,0 +1,9 @@
+{
+ "_doc": "`arch_gate.py` 的 G3（unsafe 硬规则）豁免登记。每条**必须写 why**——没理由的条目门会直接判红。允许 unsafe 的默认面：平台后缀文件（_windows/_darwin/_unix/_linux/_android/_ios）与 third_party/。",
+ "entries": [
+  {
+   "path": "internal/tool/builtin/codeindex_treesitter.go",
+   "why": "cgo 边界：tree-sitter 的 C API 通过 unsafe.Pointer 传 language 指针（//go:build treesitter && cgo，仅在开该 tag 时编译）。不是平台后缀文件，但是同一种「FFI 互操作」用法。改这个文件里的 unsafe 用法要重新说明。"
+  }
+ ]
+}

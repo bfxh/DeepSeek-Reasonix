@@ -1,0 +1,16 @@
+{
+ "policy": "雷同对基线：新增即红（scripts/gates/dupe_gate.py，MinHash+LSH，纯 stdlib）",
+ "threshold": 0.85,
+ "ng": 5,
+ "k": 128,
+ "bands": 16,
+ "pairs": [
+  "desktop/internal/workspacestate/lifecycle_json.go|desktop/internal/workspacestate/testdata/v2previous/lifecycle_json.go",
+  "desktop/open_workspace_darwin.go|desktop/open_workspace_unix.go",
+  "desktop/temphelper_test.go|internal/serve/temphelper_test.go",
+  "internal/i18n/messages_en.go|internal/i18n/messages_zh.go",
+  "internal/taskcatalog/close_lifecycle_test.go|internal/usagecatalog/close_lifecycle_test.go",
+  "workers/accounts/src/http/cors.ts|workers/crash-report/src/registry/http/cors.ts",
+  "workers/accounts/src/http/errors.ts|workers/crash-report/src/registry/http/errors.ts"
+ ]
+}

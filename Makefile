@@ -9,7 +9,7 @@ GOEXE := $(shell go env GOEXE)
 # One pin for the Makefile and the CI lint job; see .github/workflows/ci.yml.
 GOLANGCI_VERSION := $(shell cat .golangci-version)
 
-.PHONY: build vet fmt lint lint-go lint-install lint-cross lint-update test desktop-test desktop-test-short desktop-test-times sdk-test sdk-test-race hooks cross clean
+.PHONY: build vet fmt lint lint-go lint-install lint-cross lint-update test desktop-test desktop-test-short desktop-test-times sdk-test sdk-test-race hooks gates gates-full gates-baseline cross clean
 
 build:
 	CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o bin/reasonix$(GOEXE) ./cmd/reasonix
@@ -70,6 +70,18 @@ sdk-test-race:
 hooks:
 	@git config core.hooksPath .githooks
 	@echo "installed: core.hooksPath -> .githooks (pre-push runs go vet)"
+
+# 结构与复杂度门禁（上帝对象 / 跨文件上帝类型 / 架构约束 / 雷同代码 / 多智能体认领 /
+# 门禁自检）。纯 Python，不需要 Go 工具链；说明见 docs/GATES.md。
+gates:
+	@python3 -X utf8 scripts/gates/gate.py --fast
+
+gates-full:
+	@python3 -X utf8 scripts/gates/gate.py
+
+# 拆完一块上帝对象后重记基线——**跑完必须 git diff 过目**（基线变松 = 门变松）
+gates-baseline:
+	@python3 -X utf8 scripts/gates/gate.py --write
 
 cross:
 	@mkdir -p dist
