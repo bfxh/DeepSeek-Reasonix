@@ -34865,12 +34865,12 @@
   "max_type_members": 0
  },
  "scripts/gates/gate.py": {
-  "file_lines": 135,
+  "file_lines": 153,
   "max_fn_lines": 53,
   "max_type_members": 0
  },
  "scripts/gates/gate_selftest.py": {
-  "file_lines": 172,
+  "file_lines": 178,
   "max_fn_lines": 26,
   "max_type_members": 0
  },

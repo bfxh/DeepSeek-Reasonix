@@ -36,7 +36,13 @@ CFG = GATES / "god.gate.json"
 BASELINES = [ROOT / "docs" / "gates" / "god-baseline.json",
              ROOT / "docs" / "gates" / "dupe-baseline.json",
              ROOT / "docs" / "gates" / "type-span-baseline.json",
-             ROOT / "docs" / "gates" / "arch-baseline.json"]
+             ROOT / "docs" / "gates" / "arch-baseline.json",
+             ROOT / "docs" / "gates" / "sec-baseline.json",
+             ROOT / "docs" / "gates" / "conc-baseline.json",
+             ROOT / "docs" / "gates" / "cyc-baseline.json",
+             ROOT / "docs" / "gates" / "iface-baseline.json",
+             ROOT / "docs" / "gates" / "dep-baseline.json",
+             ROOT / "docs" / "gates" / "test-baseline.json"]
 CI = ROOT / ".github" / "workflows" / "ci.yml"
 CLAIMS = ROOT / ".agents" / "CLAIMS.md"
 

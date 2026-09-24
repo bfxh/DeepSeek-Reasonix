@@ -65,6 +65,68 @@ G3 的硬规则特意不进基线：unsafe 是安全面，不能「历史上就�
 平台后缀（`_windows.go` / `_darwin.go` …）与 `third_party/` 是 syscall 互操作的正当用法，放行；
 `internal/tool/builtin/codeindex_treesitter.go`（cgo FFI）走 `docs/gates/unsafe-exempt.json` 登记。
 
+## 四-B、附加六道门（安全 / 并发 / 复杂度 / 接口 / 分层 / 测试）
+
+这六道都是棘轮（存量全进基线，只拦**新增**）；真正零容忍的硬规则放在 sec / dep / iface。
+
+### 安全门（`sec_gate.py`）
+
+| 编号 | 规则 | 判定 | 当前存量 |
+| --- | --- | --- | --- |
+| S0 | `go.mod` 的 `replace` 指向本机路径（依赖重写会让别人构建指向你本机） | **硬** | 0 |
+| S1 | `InsecureSkipVerify: true` 关掉 TLS 校验 | **硬**（排除 `_test.go` 的 TLS fixture） | 0 |
+| S2 | 无 `Timeout` 的 `http.Client`（挂住时整条请求链占着 goroutine） | 棘轮 | 195 |
+| S3 | `exec.Command` 参数含变量（命令行注入面） | 棘轮 | 192 |
+| S4 | 硬编码凭证字面量（key/token/secret/password ≥12 字符） | 棘轮 | 0 |
+| S5 | 文件权限 0777 / 0666 | 棘轮 | 4 |
+
+### 并发门（`conc_gate.py`）
+
+| 编号 | 规则 | 判定 | 当前存量 |
+| --- | --- | --- | --- |
+| C1 | 裸 `go func(` 数量（并发面大小） | 棘轮 | 883 |
+| C2 | 包级可变全局（共享可变状态 = 数据竞争温床） | 棘轮 | 1317 |
+| C3 | `time.After(` 在循环里（定时器泄漏，Go 最常见） | 棘轮 | 85 |
+| C4 | `go func` 体里 `wg.Add(`（Add 须在启动协程前，放里面是竞态） | 棘轮 | 6 |
+| C5 | 空 `select {}`（永久阻塞） | 棘轮 | 0 |
+
+C4/C5 是棘轮不是硬规则：存量大多在 `_test.go`（测试并发的常见写法），硬开会当场卡住
+所有并行开发。正确做法是录基线、只许减。本仓真正"零容忍"的硬规则在 sec（S0/S1）、
+dep（D1）、iface（I2）。
+
+### 圈复杂度门（`cyc_gate.py`）
+
+纯文本统计分支点（if / for / range / switch / select / case / && / || / ?:），**只判产品代码**
+（测试 setup 函数复杂度高是常态，不算产品风险）。
+
+| 指标 | 阈值 | 判定 | 当前 |
+| --- | --- | --- | --- |
+| 函数圈复杂度 | >15 | 棘轮 | 1483 |
+| 函数圈复杂度 | >50（单测无法覆盖） | 棘轮 | 32（最大 `desktop/tabs.go:buildTabControllerWithContextCore` = 91） |
+
+### 接口隔离门（`iface_gate.py`）
+
+| 指标 | 阈值 | 判定 | 当前最大 |
+| --- | --- | --- | --- |
+| 接口方法数 | >12 | 棘轮 | 8 |
+| 接口方法数 | >40（失去"小契约"意义） | **硬** | 31（`internal/control/port.go:Capabilities`） |
+
+### 分层依赖门（`dep_gate.py`）
+
+| 编号 | 规则 | 判定 |
+| --- | --- | --- |
+| D1 | `internal/**` import `desktop` 或 `cmd/*`（二进制被库化 = 架构倒挂） | **硬** |
+| D2 | 单包 import 的 internal 包数（内部依赖扇出） | 棘轮（当前 3399 条边，最大 `internal/boot/boot.go` 45） |
+
+依赖方向错了，编译器只拦**环**、不拦**烂方向**。D1 钉死"二进制不可被当库 import"；
+D2 钉住单包别突然 import 十几个 internal 包（上帝依赖）。
+
+### 测试覆盖门（`test_gate.py`）
+
+`internal/`、`cmd/`、`desktop/` 下的源文件，若同目录没有 `_test.go` 伴生，记一笔。
+棘轮只拦**新增**无测试文件（存量欠账进基线），逼人给新代码写测试，不逼人回填历史。
+当前 7 个缺测试文件。
+
 ## 五、重复代码门（`dupe_gate.py`）
 
 MinHash + **LSH 分带**：7000 个源文件两两比是 2500 万对，纯 Python 跑不动；
@@ -89,7 +151,7 @@ MinHash + **LSH 分带**：7000 个源文件两两比是 2500 万对，纯 Pytho
 - S2 `pre-commit` 必须挂着 `gate.py --fast`；
 - S3 阈值只许收紧、硬阈只许 false→true、`include` 不许少、`exclude` 不许多；
 - S4 `god_gate.py` 的本仓适配（脚本同目录取配置 / 三档硬阈 / Go 支持）仍在；
-- S5 四份基线在位且是合法 JSON；
+- S5 十份基线在位且是合法 JSON（`god` / `dupe` / `type-span` / `arch` / `sec` / `conc` / `cyc` / `iface` / `dep` / `test`）；
 - S6 `.agents/CLAIMS.md` 在位；
 - S7 `ci.yml` 的 `gate-shape` 锚在位。
 
@@ -101,7 +163,7 @@ S7 与 ci.yml 那道**互盯**：gates.yml 被整个删掉时它自己不会跑�
 | 位置 | 跑什么 |
 | --- | --- |
 | `.githooks/pre-commit` | `gate.py --fast`（`make hooks` 安装） |
-| `.github/workflows/gates.yml` | 五个 job：上帝对象（含类型跨度与碰了就得减）/ 架构 / 雷同 / 多智能体 / 自检 |
+| `.github/workflows/gates.yml` | 十一个 job：上帝对象（含类型跨度与碰了就得减）/ 架构 / 安全 / 并发 / 复杂度 / 接口隔离 / 分层依赖 / 测试覆盖 / 雷同 / 多智能体 / 自检 |
 | `ci.yml` 的 `gate-shape` job | 钉子挂在这里：gates.yml 被删时它还能报警 |
 | `Makefile` | `make gates` / `gates-full` / `gates-baseline` |
 | `CONTRIBUTING.md` | 面向贡献者的四条硬规矩（**不动 `REASONIX.md`**：它进 cache-stable 的 system prefix，多一行就是每轮都要付的前缀成本，这个仓对它有 byte-stable 要求） |

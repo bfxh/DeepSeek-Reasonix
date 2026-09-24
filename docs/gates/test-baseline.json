@@ -1,0 +1,9 @@
+{
+ "cmd/extension-protocol-gen/main.go": 1,
+ "cmd/reasonix-plugin-example/main.go": 1,
+ "desktop/cmd/windows-upgrade-fixture/main.go": 1,
+ "internal/boundedllm/bounded.go": 1,
+ "internal/remote/sshtest/keys.go": 1,
+ "internal/remote/sshtest/sshtest.go": 1,
+ "internal/servecontract/capabilities.go": 1
+}

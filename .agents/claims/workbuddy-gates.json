@@ -2,7 +2,7 @@
   "agent": "workbuddy-gates",
   "driver": "寇豆码",
   "branch": "ci/gates-strict",
-  "task": "加结构与复杂度门禁（上帝对象/跨文件类型/架构/雷同/多智能体）",
+  "task": "加结构与复杂度门禁（上帝对象/跨文件类型/架构/安全/并发/复杂度/接口/分层/测试/雷同/多智能体）",
   "scope": [
     "scripts/gates/**",
     ".agents/**",

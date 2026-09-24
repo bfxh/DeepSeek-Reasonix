@@ -1,4 +1,5 @@
-# 结构与复杂度门禁：上帝对象 / 跨文件上帝类型 / 架构约束 / 雷同代码 / 多智能体认领 / 门禁自检。
+# 结构与复杂度门禁：上帝对象 / 跨文件上帝类型 / 架构约束 / 安全 / 并发 / 圈复杂度 /
+# 接口隔离 / 分层依赖 / 测试覆盖 / 雷同代码 / 多智能体认领 / 门禁自检。
 #
 # 与 ci.yml（编译、测试、lint）互补——那套管「对不对」，这套管「会不会越改越难改」。
 # 每一步都显式调用 `scripts/gates/<门>.py`，与本地 `scripts/gates/gate.py` 的 STEPS 同源；
@@ -59,6 +60,79 @@ jobs:
       # panic / os.Exit / unsafe（硬）/ 直接打印 / 残留标记 / 形参 >6
       - name: 架构约束
         run: python3 -X utf8 scripts/gates/arch_gate.py --git-tracked
+
+  sec:
+    name: 安全门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # InsecureSkipVerify:true / go.mod 本地 replace（硬）/ 无超时 HTTP Client / exec 注入 /
+      # 硬编码凭证 / 0777·0666 权限（棘轮）
+      - name: 安全约束
+        run: python3 -X utf8 scripts/gates/sec_gate.py --git-tracked
+
+  conc:
+    name: 并发门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 裸协程数 / 包级可变全局 / time.After 在循环里（定时器泄漏）/ WaitGroup.Add 竞态 / 空 select（棘轮）
+      - name: 并发约束
+        run: python3 -X utf8 scripts/gates/conc_gate.py --git-tracked
+
+  cyc:
+    name: 圈复杂度门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 函数分支点 >15（棘轮）/ >50（棘轮，只判产品代码）
+      - name: 圈复杂度
+        run: python3 -X utf8 scripts/gates/cyc_gate.py --git-tracked
+
+  iface:
+    name: 接口隔离门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 接口方法 >12（棘轮）/ >40（硬禁止）
+      - name: 接口隔离
+        run: python3 -X utf8 scripts/gates/iface_gate.py --git-tracked
+
+  dep:
+    name: 分层依赖门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 二进制（desktop / cmd）不可被 internal 库化（硬）/ 内部依赖扇出棘轮
+      - name: 分层依赖
+        run: python3 -X utf8 scripts/gates/dep_gate.py --git-tracked
+
+  test:
+    name: 测试覆盖门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 新增源文件无伴生 _test.go 即红（存量欠账进基线，只拦新增）
+      - name: 测试覆盖
+        run: python3 -X utf8 scripts/gates/test_gate.py --git-tracked
 
   dupe:
     name: 重复代码门

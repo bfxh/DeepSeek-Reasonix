@@ -1,0 +1,8 @@
+{
+ "over_soft": {
+  "desktop/native_host.go": 1,
+  "desktop/remote_app.go": 1,
+  "internal/control/inbox.go": 1,
+  "internal/control/port.go": 5
+ }
+}
