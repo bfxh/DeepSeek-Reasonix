@@ -35,24 +35,6 @@ Use ordinary commits and fast-forward pushes for review fixes. History rewrites
 and force-pushes need explicit authorization and a freshly verified target.
 A workflow document does not grant publication, merge, or release authorization.
 
-## Structure gates
-
-Structural and complexity gates live in `scripts/gates/` (`make gates`, ~45s, no Go
-toolchain needed): god objects (file/function/struct-field ratchets), **cross-file god
-types** (methods aggregated by receiver), architecture rules (panic / os.Exit / unsafe /
-direct prints / stale markers / long parameter lists), near-duplicate code, and
-multi-agent claim conflicts. See [docs/GATES.md](docs/GATES.md).
-
-Two rules bite harder than a plain ratchet:
-- **Touch tax**: changing a file that is already over a threshold means you must make it
-  smaller, not merely avoid growing it. Otherwise a 11631-line `desktop/app.go` can sit
-  untouched forever while everyone routes around it.
-- **unsafe is not grandfathered**: `import "unsafe"` outside platform-suffixed files and
-  `third_party/` fails outright.
-
-Before touching an over-threshold file, claim it in `.agents/claims/<id>.json`
-(see [.agents/CLAIMS.md](.agents/CLAIMS.md)) — several agents work this repo in parallel.
-
 ## Task references
 
 - Build, tests, lint, code style, and PR metadata:
