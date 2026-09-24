@@ -1,5 +1,6 @@
 # 结构与复杂度门禁：上帝对象 / 跨文件上帝类型 / 架构约束 / 安全 / 并发 / 圈复杂度 /
-# 接口隔离 / 分层依赖 / 测试覆盖 / 雷同代码 / 多智能体认领 / 门禁自检。
+# 接口隔离 / 分层依赖 / 测试覆盖 / 错误吞没 / 循环 defer / 休眠 / 雷同代码 /
+# 多智能体认领 / 门禁自检。
 #
 # 与 ci.yml（编译、测试、lint）互补——那套管「对不对」，这套管「会不会越改越难改」。
 # 每一步都显式调用 `scripts/gates/<门>.py`，与本地 `scripts/gates/gate.py` 的 STEPS 同源；
@@ -133,6 +134,42 @@ jobs:
       # 新增源文件无伴生 _test.go 即红（存量欠账进基线，只拦新增）
       - name: 测试覆盖
         run: python3 -X utf8 scripts/gates/test_gate.py --git-tracked
+
+  err:
+    name: 错误处理门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # if err != nil 块里 return nil / return nil,nil（错误发生却假装成功）
+      - name: 错误吞没
+        run: python3 -X utf8 scripts/gates/err_gate.py --git-tracked
+
+  loopdefer:
+    name: 循环 defer 门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # defer 在 for/range 体里（攒到函数返回才执行，循环一万次攒一万个）
+      - name: 循环 defer
+        run: python3 -X utf8 scripts/gates/loopdefer_gate.py --git-tracked
+
+  sleep:
+    name: 休眠门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 产品代码 time.Sleep（轮询/节流/启动顺序凑，几乎都是坏味道；测试不判）
+      - name: 休眠
+        run: python3 -X utf8 scripts/gates/sleep_gate.py --git-tracked
 
   dupe:
     name: 重复代码门

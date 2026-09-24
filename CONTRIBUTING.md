@@ -279,5 +279,9 @@ multi-agent claim conflicts, and a gate self-test. Full write-up: [docs/GATES.md
   path, `internal/**` importing `desktop`/`cmd` all fail outright. Watch these before pushing.
 - New code should not add: functions with cyclomatic complexity >50, interfaces with >40
   methods, or source files without a sibling `_test.go`.
+- Don't swallow errors: an `if err != nil {` block must not `return nil` / `return nil, nil`
+  (that pretends success). Don't put `defer` inside a `for`/`range` body (it runs at function
+  return, not loop end — FDs/locks pile up). Avoid `time.Sleep` in product code (poll with a
+  channel / `context` instead).
 - After splitting a god object, run `make gates-baseline` and **review the diff** — a looser
   baseline is a weaker gate.

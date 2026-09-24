@@ -127,6 +127,37 @@ D2 钉住单包别突然 import 十几个 internal 包（上帝依赖）。
 棘轮只拦**新增**无测试文件（存量欠账进基线），逼人给新代码写测试，不逼人回填历史。
 当前 7 个缺测试文件。
 
+## 四-C、再加三道（错误吞没 / 循环 defer / 休眠）
+
+专盯"编译器不报、但迟早出事或拖慢"的坏味道，三道都是棘轮、只判产品代码（测试不判）。
+
+### 错误处理门（`err_gate.py`）
+
+| 指标 | 阈值 | 判定 | 当前 |
+| --- | --- | --- | --- |
+| `if err != nil {` 块里 `return nil` / `return nil, nil`（错误发生却假装成功） | 出现即记 | 棘轮 | 105（最大 `desktop/sessions.go`、`internal/agent/save.go`、`internal/repair/update.go` 各 6） |
+
+只抓"明确假装成功"这一种：`return err` / `return fmt.Errorf(...)` 是正确写法，不判；
+也不抓 `_ = f()`（那是正当忽略，误报太多）。
+
+### 循环 defer 门（`loopdefer_gate.py`）
+
+| 指标 | 阈值 | 判定 | 当前 |
+| --- | --- | --- | --- |
+| `for`/`range` 体里**直接子层**的 `defer` | 出现即记 | 棘轮 | 3 |
+
+`defer` 直到**函数**返回才执行，不是循环迭代结束。循环里 `defer` 关文件/解锁会一直攒到
+函数返回——循环一万次攒一万个，FD / 锁一直占着。嵌套函数字面量里的 defer 不计数（跟闭包走）。
+
+### 休眠门（`sleep_gate.py`）
+
+| 指标 | 阈值 | 判定 | 当前 |
+| --- | --- | --- | --- |
+| 产品代码（非 `_test.go`）里的 `time.Sleep(` | 出现即记 | 棘轮 | 37（最大 `internal/serve/session_reclaim.go` 4） |
+
+轮询等某事发生、循环里 sleep 节流、启动顺序靠 sleep 凑——都会让程序在 CI / 弱机器上 flake、
+在延迟敏感路径上卡顿。正确做法是 `sync.Cond` / channel / `context` 取消 / `time.After`+`select`。
+
 ## 五、重复代码门（`dupe_gate.py`）
 
 MinHash + **LSH 分带**：7000 个源文件两两比是 2500 万对，纯 Python 跑不动；
@@ -151,7 +182,7 @@ MinHash + **LSH 分带**：7000 个源文件两两比是 2500 万对，纯 Pytho
 - S2 `pre-commit` 必须挂着 `gate.py --fast`；
 - S3 阈值只许收紧、硬阈只许 false→true、`include` 不许少、`exclude` 不许多；
 - S4 `god_gate.py` 的本仓适配（脚本同目录取配置 / 三档硬阈 / Go 支持）仍在；
-- S5 十份基线在位且是合法 JSON（`god` / `dupe` / `type-span` / `arch` / `sec` / `conc` / `cyc` / `iface` / `dep` / `test`）；
+- S5 十三份基线在位且是合法 JSON（`god` / `dupe` / `type-span` / `arch` / `sec` / `conc` / `cyc` / `iface` / `dep` / `test` / `err` / `loopdefer` / `sleep`）；
 - S6 `.agents/CLAIMS.md` 在位；
 - S7 `ci.yml` 的 `gate-shape` 锚在位。
 
@@ -163,7 +194,7 @@ S7 与 ci.yml 那道**互盯**：gates.yml 被整个删掉时它自己不会跑�
 | 位置 | 跑什么 |
 | --- | --- |
 | `.githooks/pre-commit` | `gate.py --fast`（`make hooks` 安装） |
-| `.github/workflows/gates.yml` | 十一个 job：上帝对象（含类型跨度与碰了就得减）/ 架构 / 安全 / 并发 / 复杂度 / 接口隔离 / 分层依赖 / 测试覆盖 / 雷同 / 多智能体 / 自检 |
+| `.github/workflows/gates.yml` | 十四个 job：上帝对象（含类型跨度与碰了就得减）/ 架构 / 安全 / 并发 / 复杂度 / 接口隔离 / 分层依赖 / 测试覆盖 / 错误吞没 / 循环 defer / 休眠 / 雷同 / 多智能体 / 自检 |
 | `ci.yml` 的 `gate-shape` job | 钉子挂在这里：gates.yml 被删时它还能报警 |
 | `Makefile` | `make gates` / `gates-full` / `gates-baseline` |
 | `CONTRIBUTING.md` | 面向贡献者的四条硬规矩（**不动 `REASONIX.md`**：它进 cache-stable 的 system prefix，多一行就是每轮都要付的前缀成本，这个仓对它有 byte-stable 要求） |

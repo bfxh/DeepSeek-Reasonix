@@ -48,6 +48,12 @@ STEPS = [
      "分层依赖（二进制不可被 internal 库化 / 内部依赖扇出棘轮）"),
     ("test-gate", [PY, "-X", "utf8", G + "test_gate.py", "--git-tracked"], "fast",
      "测试覆盖（新增源文件无伴生 _test.go 即红）"),
+    ("err-gate", [PY, "-X", "utf8", G + "err_gate.py", "--git-tracked"], "fast",
+     "错误处理（if err!=nil 块里 return nil 吞错）"),
+    ("loopdefer-gate", [PY, "-X", "utf8", G + "loopdefer_gate.py", "--git-tracked"], "fast",
+     "循环 defer（defer 在 for/range 体里会攒到函数返回才执行）"),
+    ("sleep-gate", [PY, "-X", "utf8", G + "sleep_gate.py", "--git-tracked"], "fast",
+     "休眠（产品代码 time.Sleep 几乎都是坏味道）"),
     ("dupe-gate", [PY, "-X", "utf8", G + "dupe_gate.py", "--git-tracked"], "fast",
      "重复代码（MinHash+LSH，雷同对新增即红）"),
     ("god-debt", [PY, "-X", "utf8", G + "god_debt.py", "--check"], "fast",
@@ -77,6 +83,9 @@ WRITE_STEPS = [
     ("iface-baseline", [PY, "-X", "utf8", G + "iface_gate.py", "--git-tracked", "--write"]),
     ("dep-baseline", [PY, "-X", "utf8", G + "dep_gate.py", "--git-tracked", "--write"]),
     ("test-baseline", [PY, "-X", "utf8", G + "test_gate.py", "--git-tracked", "--write"]),
+    ("err-baseline", [PY, "-X", "utf8", G + "err_gate.py", "--git-tracked", "--write"]),
+    ("loopdefer-baseline", [PY, "-X", "utf8", G + "loopdefer_gate.py", "--git-tracked", "--write"]),
+    ("sleep-baseline", [PY, "-X", "utf8", G + "sleep_gate.py", "--git-tracked", "--write"]),
     ("god-debt", [PY, "-X", "utf8", G + "god_debt.py", "--write"]),
 ]
 

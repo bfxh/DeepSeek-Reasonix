@@ -77,6 +77,9 @@ make gates
 | `scripts/gates/iface_gate.py` | 接口隔离：方法 >12 棘轮 / >40 硬禁止 |
 | `scripts/gates/dep_gate.py` | 分层依赖：二进制不可被 internal 库化（硬）/ 内部依赖扇出棘轮 |
 | `scripts/gates/test_gate.py` | 测试覆盖：新增源文件无伴生 _test.go 即红 |
+| `scripts/gates/err_gate.py` | 错误处理：if err!=nil 块里 return nil 吞错 |
+| `scripts/gates/loopdefer_gate.py` | 循环 defer：defer 在 for/range 体里攒到函数返回才执行 |
+| `scripts/gates/sleep_gate.py` | 休眠：产品代码 time.Sleep 几乎都是坏味道 |
 | `scripts/gates/god_debt.py` + `docs/gates/god-debt.md` | 存量欠账台账（数字不许手改） |
 | `scripts/gates/dupe_gate.py` | 雷同代码新增即红（纯 stdlib MinHash） |
 | `scripts/gates/agent_gate.py` | 多智能体认领 / 域不重叠 / 不越界（本页） |
