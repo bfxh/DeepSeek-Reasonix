@@ -104,6 +104,7 @@ S7 与 ci.yml 那道**互盯**：gates.yml 被整个删掉时它自己不会跑�
 | `.github/workflows/gates.yml` | 五个 job：上帝对象（含类型跨度与碰了就得减）/ 架构 / 雷同 / 多智能体 / 自检 |
 | `ci.yml` 的 `gate-shape` job | 钉子挂在这里：gates.yml 被删时它还能报警 |
 | `Makefile` | `make gates` / `gates-full` / `gates-baseline` |
+| `CONTRIBUTING.md` | 面向贡献者的四条硬规矩（**不动 `REASONIX.md`**：它进 cache-stable 的 system prefix，多一行就是每轮都要付的前缀成本，这个仓对它有 byte-stable 要求） |
 
 ## 九、欠账台账
 

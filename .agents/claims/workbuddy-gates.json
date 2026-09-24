@@ -12,7 +12,6 @@
     "Makefile",
     "docs/gates/**",
     "docs/GATES.md",
-    "REASONIX.md",
     "CONTRIBUTING.md"
   ],
   "opened": "2026-09-25",
