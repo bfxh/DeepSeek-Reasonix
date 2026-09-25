@@ -45,7 +45,11 @@ BASELINES = [ROOT / "docs" / "gates" / "god-baseline.json",
              ROOT / "docs" / "gates" / "test-baseline.json",
              ROOT / "docs" / "gates" / "err-baseline.json",
              ROOT / "docs" / "gates" / "loopdefer-baseline.json",
-             ROOT / "docs" / "gates" / "sleep-baseline.json"]
+             ROOT / "docs" / "gates" / "sleep-baseline.json",
+             ROOT / "docs" / "gates" / "ctxfirst-baseline.json",
+             ROOT / "docs" / "gates" / "grrecover-baseline.json",
+             ROOT / "docs" / "gates" / "errignore-baseline.json",
+             ROOT / "docs" / "gates" / "linelen-baseline.json"]
 CI = ROOT / ".github" / "workflows" / "ci.yml"
 CLAIMS = ROOT / ".agents" / "CLAIMS.md"
 

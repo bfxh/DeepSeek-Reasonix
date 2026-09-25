@@ -80,6 +80,12 @@ make gates
 | `scripts/gates/err_gate.py` | 错误处理：if err!=nil 块里 return nil 吞错 |
 | `scripts/gates/loopdefer_gate.py` | 循环 defer：defer 在 for/range 体里攒到函数返回才执行 |
 | `scripts/gates/sleep_gate.py` | 休眠：产品代码 time.Sleep 几乎都是坏味道 |
+| `scripts/gates/ctxfirst_gate.py` | context 首参：context.Context 必须是函数第一个参数（棘轮） |
+| `scripts/gates/ctxtodo_gate.py` | context.TODO 硬禁止：产品代码出现即红（硬，无基线） |
+| `scripts/gates/grrecover_gate.py` | 协程 recover：go func 字面量体内须有 recover 兜底（棘轮） |
+| `scripts/gates/ioutil_gate.py` | 弃用 ioutil 硬禁止：出现即红（硬，无基线） |
+| `scripts/gates/errignore_gate.py` | 忽略错误返回：_ = / x, _ = 丢弃调用结果（棘轮） |
+| `scripts/gates/linelen_gate.py` | 行长：单行 >200 字符即记（棘轮） |
 | `scripts/gates/god_debt.py` + `docs/gates/god-debt.md` | 存量欠账台账（数字不许手改） |
 | `scripts/gates/dupe_gate.py` | 雷同代码新增即红（纯 stdlib MinHash） |
 | `scripts/gates/agent_gate.py` | 多智能体认领 / 域不重叠 / 不越界（本页） |

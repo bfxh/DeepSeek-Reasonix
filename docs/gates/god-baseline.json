@@ -34879,13 +34879,18 @@
   "max_fn_lines": 65,
   "max_type_members": 0
  },
+ "scripts/gates/err_gate.py": {
+  "file_lines": 94,
+  "max_fn_lines": 21,
+  "max_type_members": 0
+ },
  "scripts/gates/gate.py": {
-  "file_lines": 162,
+  "file_lines": 178,
   "max_fn_lines": 53,
   "max_type_members": 0
  },
  "scripts/gates/gate_selftest.py": {
-  "file_lines": 181,
+  "file_lines": 185,
   "max_fn_lines": 26,
   "max_type_members": 0
  },
@@ -34919,9 +34924,19 @@
   "max_fn_lines": 53,
   "max_type_members": 0
  },
+ "scripts/gates/loopdefer_gate.py": {
+  "file_lines": 105,
+  "max_fn_lines": 42,
+  "max_type_members": 0
+ },
  "scripts/gates/sec_gate.py": {
   "file_lines": 123,
   "max_fn_lines": 41,
+  "max_type_members": 0
+ },
+ "scripts/gates/sleep_gate.py": {
+  "file_lines": 63,
+  "max_fn_lines": 21,
   "max_type_members": 0
  },
  "scripts/gates/test_gate.py": {

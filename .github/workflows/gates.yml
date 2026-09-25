@@ -1,6 +1,7 @@
 # 结构与复杂度门禁：上帝对象 / 跨文件上帝类型 / 架构约束 / 安全 / 并发 / 圈复杂度 /
-# 接口隔离 / 分层依赖 / 测试覆盖 / 错误吞没 / 循环 defer / 休眠 / 雷同代码 /
-# 多智能体认领 / 门禁自检。
+# 接口隔离 / 分层依赖 / 测试覆盖 / 错误吞没 / 循环 defer / 休眠 / context 首参 /
+# context.TODO 硬禁 / 协程 recover / 弃用 ioutil 硬禁 / 忽略错误返回 / 行长 /
+# 雷同代码 / 多智能体认领 / 门禁自检。
 #
 # 与 ci.yml（编译、测试、lint）互补——那套管「对不对」，这套管「会不会越改越难改」。
 # 每一步都显式调用 `scripts/gates/<门>.py`，与本地 `scripts/gates/gate.py` 的 STEPS 同源；
@@ -170,6 +171,78 @@ jobs:
       # 产品代码 time.Sleep（轮询/节流/启动顺序凑，几乎都是坏味道；测试不判）
       - name: 休眠
         run: python3 -X utf8 scripts/gates/sleep_gate.py --git-tracked
+
+  ctxfirst:
+    name: context 首参门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # context.Context 必须是函数第一个参数（否则调用方没法传取消/超时/值）
+      - name: context 首参
+        run: python3 -X utf8 scripts/gates/ctxfirst_gate.py --git-tracked
+
+  ctxtodo:
+    name: context.TODO 门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 产品代码禁止 context.TODO()（半成品 ctx 标记，硬规则：出现即红）
+      - name: context.TODO 硬禁止
+        run: python3 -X utf8 scripts/gates/ctxtodo_gate.py --git-tracked
+
+  grrecover:
+    name: 协程 recover 门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # go func 字面量体内须有 recover 兜底（否则 panic 拖垮进程）
+      - name: 协程 recover
+        run: python3 -X utf8 scripts/gates/grrecover_gate.py --git-tracked
+
+  ioutil:
+    name: 弃用 ioutil 门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 自 Go 1.16 起 io/ioutil 整包弃用（硬规则：出现即红）
+      - name: 弃用 ioutil 硬禁止
+        run: python3 -X utf8 scripts/gates/ioutil_gate.py --git-tracked
+
+  errignore:
+    name: 忽略错误返回门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # _ = / x, _ = 丢弃函数调用返回值（errcheck 风格，只拦新增）
+      - name: 忽略错误返回
+        run: python3 -X utf8 scripts/gates/errignore_gate.py --git-tracked
+
+  linelen:
+    name: 行长门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 单行 >200 字符即记（只拦新增超长行）
+      - name: 行长
+        run: python3 -X utf8 scripts/gates/linelen_gate.py --git-tracked
 
   dupe:
     name: 重复代码门

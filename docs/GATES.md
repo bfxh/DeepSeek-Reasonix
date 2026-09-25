@@ -1,7 +1,7 @@
 # 结构与复杂度门禁
 
 ci.yml 管「对不对」（编译、测试、lint），这一套管「会不会越改越难改」。全部零依赖、纯 Python，
-不需要 Go 工具链——`make gates` 一条命令，约 45 秒跑完 7000 个文件。
+不需要 Go 工具链——`make gates` 一条命令，约 3 分钟跑完 7000+ 个文件、23 道门。
 
 ```bash
 make gates            # 快门（pre-commit 同款）
@@ -158,6 +158,59 @@ D2 钉住单包别突然 import 十几个 internal 包（上帝依赖）。
 轮询等某事发生、循环里 sleep 节流、启动顺序靠 sleep 凑——都会让程序在 CI / 弱机器上 flake、
 在延迟敏感路径上卡顿。正确做法是 `sync.Cond` / channel / `context` 取消 / `time.After`+`select`。
 
+## 四-D、再加六道（context 首参 / context.TODO 硬禁 / 协程 recover / 弃用 ioutil 硬禁 / 忽略错误返回 / 行长）
+
+专盯 Go 里「编译器不报、但是约定 / 可靠性 / 可维护性」的坑。两道**硬规则**（当前为零，出现即红、
+不进基线），四道**棘轮**（存量进基线，只拦新增）。
+
+### context 首参门（`ctxfirst_gate.py`）
+
+| 指标 | 阈值 | 判定 | 当前 |
+| --- | --- | --- | --- |
+| 函数签名里出现 `context.Context` 但不是第一个参数 | 出现即记 | 棘轮（仅产品代码，排除 `_test.go`） | 29（最大 `internal/plugin/plugin.go` 5） |
+
+`context.Context` 不排第一，调用方就没法传取消 / 超时 / 值，整条 ctx 传播废了。掩码后按括号配平取签名，顶层拆参数找其位置。
+
+### context.TODO 硬禁门（`ctxtodo_gate.py`）
+
+| 指标 | 判定 | 当前 |
+| --- | --- | --- |
+| 产品代码（排除 `_test.go`）出现 `context.TODO()` | **硬**（出现即红，不进基线） | 0 |
+
+`context.Background()` 在 main / server 顶层是正当的「根」；`context.TODO()` 是「我欠着 ctx 从哪来」的半成品标记。当前零处，硬规则锁死不许再出现。
+
+### 协程 recover 门（`grrecover_gate.py`）
+
+| 指标 | 阈值 | 判定 | 当前 |
+| --- | --- | --- | --- |
+| 产品代码（排除 `_test.go`）里 `go func` 字面量、体内无 `recover()` 兜底 | 出现即记 | 棘轮 | 141（最大 `internal/remote/sshtest/sshtest.go` 4） |
+
+一个 goroutine panic 会拖垮整个进程；凡是自己开协程跑可能出错的逻辑，标准做法是 defer + recover 包一层。`go foo()` 调具名函数静态看不进来，本门只判函数字面量。
+
+### 弃用 ioutil 硬禁门（`ioutil_gate.py`）
+
+| 指标 | 判定 | 当前 |
+| --- | --- | --- |
+| 任意 `.go` 文件出现 `ioutil.<func>`（ReadFile/ReadAll/WriteFile/ReadDir/Discard/NopCloser/TempFile/TempDir） | **硬**（出现即红，不进基线） | 0 |
+
+自 Go 1.16 起 `io/ioutil` 整包弃用，函数已迁到 `os` / `io` / `io/fs`：ReadFile→os.ReadFile、ReadAll→io.ReadAll、WriteFile→os.WriteFile、ReadDir→os.ReadDir、Discard→io.Discard、NopCloser→io.NopCloser、TempFile→os.CreateTemp、TempDir→os.MkdirTemp。
+
+### 忽略错误返回门（`errignore_gate.py`）
+
+| 指标 | 阈值 | 判定 | 当前 |
+| --- | --- | --- | --- |
+| 产品代码（排除 `_test.go`）里 `_ = f()` / `x, _ = f()` / `_, x := f()` 丢弃函数调用结果 | 出现即记 | 棘轮 | 2743（最大 `internal/bot/gateway.go` 63） |
+
+errcheck 这道著名 linter 管的正是不处理 error。本门做语法层保守版：只盯「右值是调用（行内含 `(`）」且「不是 for/if/switch/select 初始化子句」的丢弃——`for _, v := range` / `if x, err := f()` 这类正当用法直接跳过。
+
+### 行长门（`linelen_gate.py`）
+
+| 指标 | 阈值 | 判定 | 当前 |
+| --- | --- | --- | --- |
+| 单行超过 200 字符 | 出现即记 | 棘轮 | 1189（最大 `internal/billing/catalog.go` 28） |
+
+Go 官方不强制行长，但超长行在 review / diff / 终端里都难读，也常是「一个表达式塞太多东西」或「超长 struct tag / import 路径」的信号。只拦**新增**超长行，改文件时顺手断行即可。
+
 ## 五、重复代码门（`dupe_gate.py`）
 
 MinHash + **LSH 分带**：7000 个源文件两两比是 2500 万对，纯 Python 跑不动；
@@ -182,7 +235,7 @@ MinHash + **LSH 分带**：7000 个源文件两两比是 2500 万对，纯 Pytho
 - S2 `pre-commit` 必须挂着 `gate.py --fast`；
 - S3 阈值只许收紧、硬阈只许 false→true、`include` 不许少、`exclude` 不许多；
 - S4 `god_gate.py` 的本仓适配（脚本同目录取配置 / 三档硬阈 / Go 支持）仍在；
-- S5 十三份基线在位且是合法 JSON（`god` / `dupe` / `type-span` / `arch` / `sec` / `conc` / `cyc` / `iface` / `dep` / `test` / `err` / `loopdefer` / `sleep`）；
+- S5 十七份基线在位且是合法 JSON（`god` / `dupe` / `type-span` / `arch` / `sec` / `conc` / `cyc` / `iface` / `dep` / `test` / `err` / `loopdefer` / `sleep` / `ctxfirst` / `grrecover` / `errignore` / `linelen`）；`ctxtodo` / `ioutil` 是硬规则，无基线；
 - S6 `.agents/CLAIMS.md` 在位；
 - S7 `ci.yml` 的 `gate-shape` 锚在位。
 
@@ -194,7 +247,7 @@ S7 与 ci.yml 那道**互盯**：gates.yml 被整个删掉时它自己不会跑�
 | 位置 | 跑什么 |
 | --- | --- |
 | `.githooks/pre-commit` | `gate.py --fast`（`make hooks` 安装） |
-| `.github/workflows/gates.yml` | 十四个 job：上帝对象（含类型跨度与碰了就得减）/ 架构 / 安全 / 并发 / 复杂度 / 接口隔离 / 分层依赖 / 测试覆盖 / 错误吞没 / 循环 defer / 休眠 / 雷同 / 多智能体 / 自检 |
+| `.github/workflows/gates.yml` | 二十个 job：上帝对象（含类型跨度与碰了就得减）/ 架构 / 安全 / 并发 / 复杂度 / 接口隔离 / 分层依赖 / 测试覆盖 / 错误吞没 / 循环 defer / 休眠 / context 首参 / context.TODO 硬禁 / 协程 recover / 弃用 ioutil 硬禁 / 忽略错误返回 / 行长 / 雷同 / 多智能体 / 自检 |
 | `ci.yml` 的 `gate-shape` job | 钉子挂在这里：gates.yml 被删时它还能报警 |
 | `Makefile` | `make gates` / `gates-full` / `gates-baseline` |
 | `CONTRIBUTING.md` | 面向贡献者的四条硬规矩（**不动 `REASONIX.md`**：它进 cache-stable 的 system prefix，多一行就是每轮都要付的前缀成本，这个仓对它有 byte-stable 要求） |

@@ -263,10 +263,12 @@ same license as the project.
 
 ## Structure and complexity gates
 
-`make gates` runs the structure gates (`scripts/gates/`, pure Python, ~2 min over 7000 files):
+`make gates` runs the structure gates (`scripts/gates/`, pure Python, ~3 min over 7000+ files):
 god objects, cross-file god types, **touch tax**, architecture rules, security, concurrency,
-cyclomatic complexity, interface segregation, layering, test coverage, near-duplicate code,
-multi-agent claim conflicts, and a gate self-test. Full write-up: [docs/GATES.md](docs/GATES.md).
+cyclomatic complexity, interface segregation, layering, test coverage, error swallowing, loop
+`defer`, `time.Sleep`, context-first-param, `context.TODO` ban, goroutine `recover`, deprecated
+`ioutil` ban, ignored error returns, long lines, near-duplicate code, multi-agent claim
+conflicts, and a gate self-test. Full write-up: [docs/GATES.md](docs/GATES.md).
 
 - No god objects: file ≤1000 lines, function ≤80 lines, struct ≤20 fields, and a type's
   methods ≤40 across ≤8 files. All are ratchets — they may shrink, never grow.
@@ -277,11 +279,18 @@ multi-agent claim conflicts, and a gate self-test. Full write-up: [docs/GATES.md
   `docs/gates/unsafe-exempt.json`.
 - Security & layering hard rules: `InsecureSkipVerify: true`, `go.mod` `replace` to a local
   path, `internal/**` importing `desktop`/`cmd` all fail outright. Watch these before pushing.
+- Two more hard bans (current count is zero, any occurrence fails): `context.TODO()` in product
+  code (use `context.Background()` as the root, or thread a `context.Context` through), and any
+  `ioutil.*` call (deprecated since Go 1.16 — use `os`/`io`/`io/fs` equivalents).
 - New code should not add: functions with cyclomatic complexity >50, interfaces with >40
   methods, or source files without a sibling `_test.go`.
 - Don't swallow errors: an `if err != nil {` block must not `return nil` / `return nil, nil`
   (that pretends success). Don't put `defer` inside a `for`/`range` body (it runs at function
   return, not loop end — FDs/locks pile up). Avoid `time.Sleep` in product code (poll with a
   channel / `context` instead).
+- `context.Context` must be the first parameter of any function that takes one. Any goroutine
+  started with a `go func() { … }()` literal must `defer` a `recover()` (an unrecovered panic in
+  a goroutine takes down the whole process). Don't discard call results with `_ = f()` /
+  `x, _ = f()` (handle the error). Keep lines under 200 characters.
 - After splitting a god object, run `make gates-baseline` and **review the diff** — a looser
   baseline is a weaker gate.
