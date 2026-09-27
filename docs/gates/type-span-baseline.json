@@ -1,0 +1,470 @@
+{
+ "cmd/e2ebench|trajScan": {
+  "methods": 14,
+  "files": 4
+ },
+ "internal/assembly/boot|builder": {
+  "methods": 11,
+  "files": 3
+ },
+ "internal/contract/config|ActivationStore": {
+  "methods": 25,
+  "files": 3
+ },
+ "internal/contract/config|Config": {
+  "methods": 161,
+  "files": 25
+ },
+ "internal/contract/config|PluginEntry": {
+  "methods": 4,
+  "files": 3
+ },
+ "internal/contract/config|ProviderEntry": {
+  "methods": 21,
+  "files": 8
+ },
+ "internal/contract/config|Roots": {
+  "methods": 51,
+  "files": 15
+ },
+ "internal/contract/event|AuditForwarder": {
+  "methods": 13,
+  "files": 1
+ },
+ "internal/contract/event|coalescer": {
+  "methods": 17,
+  "files": 1
+ },
+ "internal/contract/event|syncSink": {
+  "methods": 14,
+  "files": 1
+ },
+ "internal/contract/tool|Registry": {
+  "methods": 20,
+  "files": 2
+ },
+ "internal/ext/extension/providerext|Resolver": {
+  "methods": 18,
+  "files": 3
+ },
+ "internal/ext/extension/rpcwire|Conn": {
+  "methods": 28,
+  "files": 1
+ },
+ "internal/ext/extension/sidecar|Client": {
+  "methods": 45,
+  "files": 5
+ },
+ "internal/ext/extension/uihub|Hub": {
+  "methods": 18,
+  "files": 1
+ },
+ "internal/ext/extension|PublishGate": {
+  "methods": 17,
+  "files": 1
+ },
+ "internal/ext/extension|RuntimeSnapshot": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/ext/hook|Runner": {
+  "methods": 30,
+  "files": 1
+ },
+ "internal/ext/installsource|installSourceTool": {
+  "methods": 54,
+  "files": 9
+ },
+ "internal/ext/plugin|Client": {
+  "methods": 33,
+  "files": 9
+ },
+ "internal/ext/plugin|Host": {
+  "methods": 57,
+  "files": 8
+ },
+ "internal/ext/plugin|httpTransport": {
+  "methods": 14,
+  "files": 1
+ },
+ "internal/ext/plugin|lazyTool": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/ext/plugin|reconnectingTransport": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/ext/plugin|remoteTool": {
+  "methods": 13,
+  "files": 1
+ },
+ "internal/ext/plugin|sseTransport": {
+  "methods": 13,
+  "files": 1
+ },
+ "internal/ext/skill|Store": {
+  "methods": 29,
+  "files": 2
+ },
+ "internal/frontend/acp|Conn": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/frontend/acp|acpSession": {
+  "methods": 25,
+  "files": 4
+ },
+ "internal/frontend/acp|service": {
+  "methods": 69,
+  "files": 9
+ },
+ "internal/frontend/acp|updateSink": {
+  "methods": 18,
+  "files": 1
+ },
+ "internal/frontend/cli|metricsSink": {
+  "methods": 14,
+  "files": 1
+ },
+ "internal/frontend/cli|providerSetupSession": {
+  "methods": 19,
+  "files": 1
+ },
+ "internal/frontend/serve|Broadcaster": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/frontend/serve|DeviceRegistry": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/frontend/serve|Hub": {
+  "methods": 97,
+  "files": 16
+ },
+ "internal/frontend/serve|Server": {
+  "methods": 237,
+  "files": 62
+ },
+ "internal/frontend/serve|authGate": {
+  "methods": 18,
+  "files": 1
+ },
+ "internal/frontend/termrender|MarkdownRenderer": {
+  "methods": 16,
+  "files": 1
+ },
+ "internal/frontend/tui|Client": {
+  "methods": 19,
+  "files": 4
+ },
+ "internal/frontend/tui|Transcript": {
+  "methods": 21,
+  "files": 2
+ },
+ "internal/frontend/tui|model": {
+  "methods": 97,
+  "files": 12
+ },
+ "internal/model/anthropic|client": {
+  "methods": 11,
+  "files": 3
+ },
+ "internal/model/openai|client": {
+  "methods": 21,
+  "files": 6
+ },
+ "internal/model/responses|client": {
+  "methods": 14,
+  "files": 3
+ },
+ "internal/model/responses|turn": {
+  "methods": 17,
+  "files": 1
+ },
+ "internal/platform/appupdate|capability": {
+  "methods": 15,
+  "files": 5
+ },
+ "internal/platform/browser|Session": {
+  "methods": 50,
+  "files": 8
+ },
+ "internal/platform/browser|tab": {
+  "methods": 38,
+  "files": 4
+ },
+ "internal/platform/computer|Session": {
+  "methods": 10,
+  "files": 1
+ },
+ "internal/platform/lsp|Manager": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/platform/lsp|client": {
+  "methods": 10,
+  "files": 1
+ },
+ "internal/platform/remote/attach|Pool": {
+  "methods": 17,
+  "files": 3
+ },
+ "internal/platform/remote/forward|Set": {
+  "methods": 15,
+  "files": 1
+ },
+ "internal/platform/remote/sftpfs|FS": {
+  "methods": 15,
+  "files": 1
+ },
+ "internal/platform/remote/sshtest|Server": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/platform/remote|Client": {
+  "methods": 17,
+  "files": 1
+ },
+ "internal/platform/remote|SSHConfigSource": {
+  "methods": 15,
+  "files": 1
+ },
+ "internal/platform/update|Line": {
+  "methods": 8,
+  "files": 5
+ },
+ "internal/platform/update|VersionedInstaller": {
+  "methods": 5,
+  "files": 5
+ },
+ "internal/runtime/agent|Agent": {
+  "methods": 299,
+  "files": 66
+ },
+ "internal/runtime/agent|contextWindow": {
+  "methods": 112,
+  "files": 22
+ },
+ "internal/runtime/agent|missingReasoningWarnState": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/runtime/agent|toolCallPlan": {
+  "methods": 3,
+  "files": 3
+ },
+ "internal/runtime/capability|Audit": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/runtime/capability|Ledger": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/runtime/coordinator|Coordinator": {
+  "methods": 19,
+  "files": 3
+ },
+ "internal/runtime/delegation|SubagentStore": {
+  "methods": 32,
+  "files": 4
+ },
+ "internal/runtime/delegation|TaskTool": {
+  "methods": 59,
+  "files": 10
+ },
+ "internal/runtime/delegation|fleetPlan": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/runtime/delegation|subagentProgressMerger": {
+  "methods": 18,
+  "files": 1
+ },
+ "internal/runtime/guardian|Session": {
+  "methods": 15,
+  "files": 1
+ },
+ "internal/runtime/isolation|Store": {
+  "methods": 15,
+  "files": 3
+ },
+ "internal/runtime/recovery|Gate": {
+  "methods": 32,
+  "files": 2
+ },
+ "internal/runtime/recovery|taskRuntime": {
+  "methods": 14,
+  "files": 1
+ },
+ "internal/runtime/taskcontract|Contract": {
+  "methods": 25,
+  "files": 1
+ },
+ "internal/runtime/taskmonitor|FileStore": {
+  "methods": 17,
+  "files": 2
+ },
+ "internal/runtime/taskmonitor|InMemoryStore": {
+  "methods": 13,
+  "files": 1
+ },
+ "internal/runtime/taskmonitor|TmuxAdapter": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/runtime/usecap|MCPCapabilityRuntime": {
+  "methods": 15,
+  "files": 2
+ },
+ "internal/runtime/usecap|UseCapabilityTool": {
+  "methods": 30,
+  "files": 5
+ },
+ "internal/runtime/usecap|onDemandMCPConnect": {
+  "methods": 10,
+  "files": 1
+ },
+ "internal/runtime/usecap|onDemandMCPTool": {
+  "methods": 13,
+  "files": 1
+ },
+ "internal/runtime/usecap|runtimeBoundMCPTool": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/runtime/writeclaim|SubagentScheduler": {
+  "methods": 15,
+  "files": 1
+ },
+ "internal/safety/egress|Proxy": {
+  "methods": 20,
+  "files": 1
+ },
+ "internal/safety/evidence|Ledger": {
+  "methods": 59,
+  "files": 16
+ },
+ "internal/safety/permission|Policy": {
+  "methods": 10,
+  "files": 3
+ },
+ "internal/safety/sandbox|Spec": {
+  "methods": 3,
+  "files": 3
+ },
+ "internal/session/control|Controller": {
+  "methods": 508,
+  "files": 73
+ },
+ "internal/session/control|approvalManager": {
+  "methods": 38,
+  "files": 2
+ },
+ "internal/session/control|checkpointManager": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/session/control|frontendEventSink": {
+  "methods": 11,
+  "files": 1
+ },
+ "internal/session/control|goalMachine": {
+  "methods": 40,
+  "files": 6
+ },
+ "internal/session/control|mcpManager": {
+  "methods": 14,
+  "files": 1
+ },
+ "internal/session/control|memoryManager": {
+  "methods": 20,
+  "files": 1
+ },
+ "internal/session/control|skillSet": {
+  "methods": 10,
+  "files": 1
+ },
+ "internal/session/control|turnOrchestrator": {
+  "methods": 12,
+  "files": 2
+ },
+ "internal/state/checkpoint|MutationObserver": {
+  "methods": 14,
+  "files": 1
+ },
+ "internal/state/checkpoint|Store": {
+  "methods": 75,
+  "files": 3
+ },
+ "internal/state/historycatalog|Catalog": {
+  "methods": 24,
+  "files": 2
+ },
+ "internal/state/memory|Set": {
+  "methods": 11,
+  "files": 2
+ },
+ "internal/state/memory|Store": {
+  "methods": 30,
+  "files": 4
+ },
+ "internal/state/sessioninbox|Store": {
+  "methods": 43,
+  "files": 5
+ },
+ "internal/state/sessionstore|Session": {
+  "methods": 67,
+  "files": 9
+ },
+ "internal/state/sessionstore|SessionLease": {
+  "methods": 4,
+  "files": 3
+ },
+ "internal/state/sessiontemp|Manager": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/state/trajectory|Recorder": {
+  "methods": 17,
+  "files": 1
+ },
+ "internal/state/usagecatalog|Catalog": {
+  "methods": 17,
+  "files": 1
+ },
+ "internal/state/workspacelease|Owner": {
+  "methods": 16,
+  "files": 2
+ },
+ "internal/tools/builtin|bash": {
+  "methods": 14,
+  "files": 4
+ },
+ "internal/tools/builtin|codeIndex": {
+  "methods": 8,
+  "files": 3
+ },
+ "internal/tools/builtin|htmlTextWriter": {
+  "methods": 12,
+  "files": 1
+ },
+ "internal/tools/jobs|Job": {
+  "methods": 9,
+  "files": 3
+ },
+ "internal/tools/jobs|Manager": {
+  "methods": 59,
+  "files": 5
+ },
+ "sdk/go|conn": {
+  "methods": 20,
+  "files": 1
+ },
+ "sdk/go|server": {
+  "methods": 22,
+  "files": 3
+ }
+}

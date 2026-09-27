@@ -1,0 +1,13 @@
+{
+ "internal/base/fileutil/atomicwrite.go": 2,
+ "internal/base/tempdir/tempdir.go": 1,
+ "internal/base/testenv/tempdir.go": 1,
+ "internal/ext/mcplaunch/launch.go": 1,
+ "internal/frontend/termrender/theme_osc_unix.go": 1,
+ "internal/platform/appupdate/delta.go": 1,
+ "internal/platform/update/apply_darwin.go": 1,
+ "internal/platform/update/install_windows.go": 1,
+ "internal/platform/update/tree_handoff.go": 1,
+ "internal/state/sessionstore/branch.go": 1,
+ "internal/state/sessionstore/save.go": 1
+}

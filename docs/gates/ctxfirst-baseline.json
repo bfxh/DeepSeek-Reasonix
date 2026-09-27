@@ -1,0 +1,11 @@
+{
+ "internal/ext/extension/rpcwire/conn.go": 1,
+ "internal/ext/extension/uihub/hub.go": 2,
+ "internal/ext/plugin/client_session.go": 1,
+ "internal/ext/plugin/install.go": 1,
+ "internal/ext/plugin/lazy.go": 2,
+ "internal/ext/plugin/plugin.go": 5,
+ "internal/runtime/delegation/subagent_identity.go": 1,
+ "internal/session/control/controller_deps.go": 1,
+ "internal/session/control/mcp.go": 1
+}

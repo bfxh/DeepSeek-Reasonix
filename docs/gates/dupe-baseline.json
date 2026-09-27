@@ -1,0 +1,12 @@
+{
+ "policy": "雷同对基线：新增即红（scripts/gates/dupe_gate.py，MinHash+LSH，纯 stdlib）",
+ "threshold": 0.85,
+ "ng": 5,
+ "k": 128,
+ "bands": 16,
+ "pairs": [
+  "output/agent-workbench-v5/workspace.js|output/agent-workbench-v6/workspace.js",
+  "workers/accounts/src/http/cors.ts|workers/crash-report/src/registry/http/cors.ts",
+  "workers/accounts/src/http/errors.ts|workers/crash-report/src/registry/http/errors.ts"
+ ]
+}

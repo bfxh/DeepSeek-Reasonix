@@ -1,0 +1,298 @@
+# 结构与复杂度门禁：上帝对象 / 跨文件上帝类型 / 架构约束 / 安全 / 并发 / 圈复杂度 /
+# 接口隔离 / 分层依赖 / 测试覆盖 / 错误吞没 / 循环 defer / 休眠 / context 首参 /
+# context.TODO 硬禁 / 协程 recover / 弃用 ioutil 硬禁 / 忽略错误返回 / 行长 /
+# 雷同代码 / 多智能体认领 / 门禁自检。
+#
+# 与 ci.yml（编译、测试、lint）互补——那套管「对不对」，这套管「会不会越改越难改」。
+# 每一步都显式调用 `scripts/gates/<门>.py`，与本地 `scripts/gates/gate.py` 的 STEPS 同源；
+# 「本地有 CI 没有」或「CI 有本地没有」由 `gate_selftest.py` 的 S1 双向判红。
+#
+# 比棘轮更严厉的一步是 **god-touch（碰了就得减）**：改了已经超阈的文件，
+# 就必须把它变小，只允许「不许变胖」是不够的——否则 11631 行的 desktop/app.go 能永远躺着。
+name: gates
+
+on:
+  push:
+    branches: [studio]
+  pull_request:
+    branches: [studio]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gates-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  god:
+    name: 上帝对象门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # 文件 / 函数 / 类型规模棘轮（阈值：文件 ≤1000 行 / 函数 ≤80 行 / 结构体 ≤20 字段）
+      - name: 规模棘轮
+        run: python3 -X utf8 scripts/gates/god_gate.py --root . --git-tracked
+
+      # 按接收者聚合方法：`desktop|App` 1847 个方法散在 306 个文件，只有聚合才看得见
+      - name: 跨文件上帝类型
+        run: python3 -X utf8 scripts/gates/type_span_gate.py --git-tracked
+
+      - name: 欠账台账对账
+        run: python3 -X utf8 scripts/gates/god_debt.py --check
+
+      # **碰了就得减**：这次改动碰到的超阈文件，必须至少变小 N（配置 touch_tax_min_reduction）
+      - name: 碰了就得减
+        run: |
+          python3 -X utf8 scripts/gates/god_touch.py \
+            --base "${{ github.event.pull_request.base.sha || github.event.before }}"
+
+  arch:
+    name: 架构约束门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # panic / os.Exit / unsafe（硬）/ 直接打印 / 残留标记 / 形参 >6
+      - name: 架构约束
+        run: python3 -X utf8 scripts/gates/arch_gate.py --git-tracked
+
+  sec:
+    name: 安全门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # InsecureSkipVerify:true / go.mod 本地 replace（硬）/ 无超时 HTTP Client / exec 注入 /
+      # 硬编码凭证 / 0777·0666 权限（棘轮）
+      - name: 安全约束
+        run: python3 -X utf8 scripts/gates/sec_gate.py --git-tracked
+
+  conc:
+    name: 并发门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 裸协程数 / 包级可变全局 / time.After 在循环里（定时器泄漏）/ WaitGroup.Add 竞态 / 空 select（棘轮）
+      - name: 并发约束
+        run: python3 -X utf8 scripts/gates/conc_gate.py --git-tracked
+
+  cyc:
+    name: 圈复杂度门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 函数分支点 >15（棘轮）/ >50（棘轮，只判产品代码）
+      - name: 圈复杂度
+        run: python3 -X utf8 scripts/gates/cyc_gate.py --git-tracked
+
+  iface:
+    name: 接口隔离门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 接口方法 >12（棘轮）/ >40（硬禁止）
+      - name: 接口隔离
+        run: python3 -X utf8 scripts/gates/iface_gate.py --git-tracked
+
+  dep:
+    name: 分层依赖门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 二进制（desktop / cmd）不可被 internal 库化（硬）/ 内部依赖扇出棘轮
+      - name: 分层依赖
+        run: python3 -X utf8 scripts/gates/dep_gate.py --git-tracked
+
+  test:
+    name: 测试覆盖门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 新增源文件无伴生 _test.go 即红（存量欠账进基线，只拦新增）
+      - name: 测试覆盖
+        run: python3 -X utf8 scripts/gates/test_gate.py --git-tracked
+
+  err:
+    name: 错误处理门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # if err != nil 块里 return nil / return nil,nil（错误发生却假装成功）
+      - name: 错误吞没
+        run: python3 -X utf8 scripts/gates/err_gate.py --git-tracked
+
+  loopdefer:
+    name: 循环 defer 门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # defer 在 for/range 体里（攒到函数返回才执行，循环一万次攒一万个）
+      - name: 循环 defer
+        run: python3 -X utf8 scripts/gates/loopdefer_gate.py --git-tracked
+
+  sleep:
+    name: 休眠门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 产品代码 time.Sleep（轮询/节流/启动顺序凑，几乎都是坏味道；测试不判）
+      - name: 休眠
+        run: python3 -X utf8 scripts/gates/sleep_gate.py --git-tracked
+
+  ctxfirst:
+    name: context 首参门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # context.Context 必须是函数第一个参数（否则调用方没法传取消/超时/值）
+      - name: context 首参
+        run: python3 -X utf8 scripts/gates/ctxfirst_gate.py --git-tracked
+
+  ctxtodo:
+    name: context.TODO 门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 产品代码禁止 context.TODO()（半成品 ctx 标记，硬规则：出现即红）
+      - name: context.TODO 硬禁止
+        run: python3 -X utf8 scripts/gates/ctxtodo_gate.py --git-tracked
+
+  grrecover:
+    name: 协程 recover 门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # go func 字面量体内须有 recover 兜底（否则 panic 拖垮进程）
+      - name: 协程 recover
+        run: python3 -X utf8 scripts/gates/grrecover_gate.py --git-tracked
+
+  ioutil:
+    name: 弃用 ioutil 门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 自 Go 1.16 起 io/ioutil 整包弃用（硬规则：出现即红）
+      - name: 弃用 ioutil 硬禁止
+        run: python3 -X utf8 scripts/gates/ioutil_gate.py --git-tracked
+
+  errignore:
+    name: 忽略错误返回门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # _ = / x, _ = 丢弃函数调用返回值（errcheck 风格，只拦新增）
+      - name: 忽略错误返回
+        run: python3 -X utf8 scripts/gates/errignore_gate.py --git-tracked
+
+  linelen:
+    name: 行长门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 单行 >200 字符即记（只拦新增超长行）
+      - name: 行长
+        run: python3 -X utf8 scripts/gates/linelen_gate.py --git-tracked
+
+  dupe:
+    name: 重复代码门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # MinHash + LSH 分带（7000 个文件两两比跑不动，分带后十几秒）
+      - name: 雷同对检查
+        run: python3 -X utf8 scripts/gates/dupe_gate.py --git-tracked
+
+  agents:
+    name: 多智能体协作门
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # 声明格式 + 域不重叠（A1/A2/A3）。CI 上没有 QJ_AGENT_ID ⇒ 不跑越界检查（A4/A5）。
+      - name: 认领与域冲突
+        run: python3 -X utf8 scripts/gates/agent_gate.py --changed-from none
+
+      - name: 列出当前认领
+        continue-on-error: true
+        run: python3 -X utf8 scripts/gates/agent_gate.py --list
+
+  selftest:
+    name: 门禁自检
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # 门不许被悄悄削弱：阈值放宽 / 硬阈关掉 / workflow 少一步 / 钩子上少一步 / 基线被删
+      - name: 门未被削弱
+        run: python3 -X utf8 scripts/gates/gate_selftest.py
+
+      # 门是不是真门：注入一次失败，它必须红（绿了说明这一步根本没生效）
+      - name: 门是真门（注入失败自检）
+        env:
+          QJ_GATE_FORCE_FAIL: god-gate
+        run: |
+          if python3 -X utf8 scripts/gates/gate.py --only god-gate >/dev/null 2>&1; then
+            echo "::error::注入失败后门仍然绿——这一步没有真正生效（门是假的）"
+            exit 1
+          fi
+          echo "注入 god-gate 失败 ⇒ 门如期变红"

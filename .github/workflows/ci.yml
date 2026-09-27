@@ -516,3 +516,21 @@ jobs:
           name: coverage-report
           path: coverage.out
           retention-days: 7
+
+  # Structure/complexity gates must not be quietly weakened (ratchet + hard rules +
+  # self-test). Ported from PR #10745; see docs/GATES.md. This lives in ci.yml, not
+  # only gates.yml, because gates.yml can be deleted and silently stop running.
+  gate-shape:
+    name: Gates shape (gates must not be quietly weakened)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # gate_selftest.py: gate scripts and gates.yml stay in sync in both directions,
+      # the pre-commit hook still calls the fast gate, thresholds were not relaxed,
+      # and the baselines are still present.
+      - name: Gates still present and not weakened
+        run: python3 -X utf8 scripts/gates/gate_selftest.py
